@@ -6,15 +6,12 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.util.Calendar;
-
 import org.jsoup.HttpStatusException;
 import org.jsoup.Jsoup;
 import org.jsoup.Connection.Response;
 import org.jsoup.select.Elements;
 
 public class Writer {
-        //TODO add Log of downloaded images and their sources
-        //TODO Get JSON file from website.
 
     public static void WriteTextToFile(String text, String URL) {
         File file = new File("Output.txt");

@@ -4,12 +4,21 @@ package com.webscrapper;
 
 public class Scrapper {
 
-    //TODO Add GUI
+    //TODO Add GUI.
+    //TODO Add a Log after each Scrape.
+    //Current Issues:
+    //  Some files are duplicated (Depending on website).
+    //  Most Videos cannot be read (Solutions differ with websites).
+    //  Text is not Formatted.
+    //  File types are overwritten.
+    //  Unable to grab Typical Download Links.
 
     public static void main(String[] args) {
         //Site s = new Site("https://en.wikipedia.org/wiki/Rainforest");
         //Site s = new Site("https://www.google.com");
-        Site s = new Site("https://minecraft.fandom.com/wiki/Skeleton");
+        //Site s = new Site("https://en.wikipedia.org/wiki/Bird_vocalization");    //Cannot Get Audio
+        //Site s = new Site("http://thissounddoesnotexist.org/");    //Cannot Download Audio
+        Site s = new Site("https://minecraft.fandom.com/wiki/Skeleton");    //Audio is Duplicated
         
         Writer.WriteTextToFile(s.getText(), s.url);
         Writer.savePicturesToFolder(s.getImages());
@@ -17,7 +26,7 @@ public class Scrapper {
     }
     
 
-    //GUI
+    //GUI goes here
     public static void displayOptions() {
         /*Scanner keys = new Scanner(System.in);
         System.out.println("----------------------------------------------------");

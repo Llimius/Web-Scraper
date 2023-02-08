@@ -2,12 +2,9 @@ package com.webscrapper;
 
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
-
 import java.io.IOException;
 import java.net.UnknownHostException;
-
 import org.jsoup.Jsoup;
-
 
 public class Site {
 
@@ -41,7 +38,7 @@ public class Site {
 
     public Elements getImages() {
         Elements images = new Elements();
-        images = doc.body().select("img[src~=(?i)\\.(png|jpe?g|gif)]");
+        images = doc.body().select("img[src~=(?i)\\.(png|jpe?g|gif|svg)]");
         return images;
     }
 
@@ -54,7 +51,13 @@ public class Site {
 
     public Elements getAudios() {
         Elements audios = new Elements();
-        audios = doc.body().select("audio[src~=(?a)\\.(mp3|ogg|wav|m4a|flac)]");
+        audios = doc.body().select("audio[src~=(?i)\\.(mp3|ogg|wav|m4a|flac)]");
         return audios;
+    }
+
+    public Elements getJSON() {
+        Elements jsons = new Elements();
+        jsons = doc.body().getElementsByTag("script");
+        return jsons;
     }
 }
