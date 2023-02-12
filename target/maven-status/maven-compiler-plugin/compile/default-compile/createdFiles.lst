@@ -1,2 +1,5 @@
 com/webscrapper/Scrapper.class
-com/webscrapper/Data.class
+com/webscrapper/Writer.class
+com/webscrapper/GUI.class
+com/webscrapper/Site.class
+com/webscrapper/GUI$1.class
