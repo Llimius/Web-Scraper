@@ -11,9 +11,9 @@ public class Site {
     public String url;
     private Document doc;
 
-    public Site (String u) {
+    public Site (String URL) {
         try {
-            url = u;
+            url = URL;
             doc = Jsoup.connect(url).followRedirects(false).timeout(60000).get();
             System.out.println("Connected to Site " + url);
         }
@@ -42,22 +42,9 @@ public class Site {
         return images;
     }
 
-    public Elements getVideos() {
-        Elements videos = new Elements();
-        videos = doc.body().getElementsByTag("video")
-        .select("source[src]");
-        return videos;
-    }
-
     public Elements getAudios() {
         Elements audios = new Elements();
-        audios = doc.body().select("audio[src~=(?i)\\.(mp3|ogg|wav|m4a|flac)]");
+        audios = doc.body().select("audio");
         return audios;
-    }
-
-    public Elements getJSON() {
-        Elements jsons = new Elements();
-        jsons = doc.body().getElementsByTag("script");
-        return jsons;
     }
 }

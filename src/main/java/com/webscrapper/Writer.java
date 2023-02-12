@@ -6,6 +6,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.util.Calendar;
+import java.util.ArrayList;
 import org.jsoup.HttpStatusException;
 import org.jsoup.Jsoup;
 import org.jsoup.Connection.Response;
@@ -78,7 +79,7 @@ public class Writer {
         System.out.println("Finished Writing Images");
     }
 
-
+//-------------------------------------------------------------
 
     public static void saveAudiosToFolder(Elements Audios) {
         File folder = new File("audios");
@@ -95,6 +96,14 @@ public class Writer {
             File audioFile = new File(folder, "audio" + next + ".ogg");
 
             String link = Audios.get(i).absUrl("src");
+            for (int p=0; p<Audios.get(i).childrenSize(); p++) {
+                if (Audios.get(i).child(p).hasAttr("src")) {
+                    link = Audios.get(i).child(p).attr("abs:src");
+                    break;
+                }
+            }
+            
+
             //Attempt at Downloading Image
             try {
                 Response resultAudio = Jsoup.connect(link).ignoreContentType(true).timeout(60000).execute();
@@ -116,46 +125,6 @@ public class Writer {
         }
         System.out.println("Finished Writing Audio Files");
     }
-
-
-    public static void saveVideosToFolder(Elements Videos) {
-        File folder = new File("videos");
-
-        //Creates Empty Folder
-        if (folder.exists() == false) {
-            System.out.println("Creating videos Folder...");
-            folder.mkdir();
-        }
-
-        int next = getNextInteger("video", ".webm");
-
-        for (int i=0; i<Videos.size(); i++, next++) {
-            File videoFile = new File(folder, "video" + next + ".webm");
-
-            String link = Videos.get(i).absUrl("src");
-            //Attempt at Downloading Image
-            try {
-                Response resultVideo = Jsoup.connect(link).ignoreContentType(true).timeout(60000).execute();
-                FileOutputStream out = new FileOutputStream(videoFile);
-                out.write(resultVideo.bodyAsBytes());
-                out.close();
-
-            //Exception Handlers
-            } catch (HttpStatusException h) {
-                System.out.println("Cannot access: " + link);
-                System.out.println(h.getMessage());
-            } catch (MalformedURLException u) {
-                System.out.println("Incorrect URL: " + link);
-                System.out.println(u.getMessage());
-            } catch (IOException e) {
-                System.out.println("Error: Cannot Write to file.");
-                e.printStackTrace();
-            }
-        }
-        System.out.println("Finished Writing Videos");
-    }
-
-
 
     public static String getDate() {
         String date;
@@ -181,6 +150,49 @@ public class Writer {
             System.out.println("Starting from scratch...");
         } else {System.out.println("Starting from Last number = " + (result-1));}
 
+        return result;
+    }
+
+    public static String[] filterSites(String text) {
+        String[] result;
+        ArrayList<String> sites = new ArrayList<String>();
+        
+
+        text = text.trim();
+        String oldText = text;
+
+        //Inserting a correct Stopping Condition for the for Loop below
+        text += "}";
+
+        //Checks for Commas.
+        for (int i=0; true; i++) {
+            if (text.charAt(i) == ',') {
+                System.out.println(text.substring(0, i));
+                sites.add(text.substring(0, i));
+                text = text.substring(i+1);
+                //Reset Counting
+                text = text.trim();
+                i=0;
+            }
+            if (text.charAt(i) == '}') {
+                System.out.println(text.substring(0, i));
+                sites.add(text.substring(0, i));
+                break;
+            }
+        }
+
+        //If there are no commas (One Site)
+        if (text.equals(oldText)) {
+            result = new String[1];
+            result[0] = text;
+            return result;
+            
+        }
+
+        result = new String[sites.size()];
+        for (int i=0; i<sites.size(); i++) {
+            result[i] = sites.get(i);
+        }
         return result;
     }
 }
