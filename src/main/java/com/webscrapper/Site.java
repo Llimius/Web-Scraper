@@ -15,7 +15,7 @@ public class Site {
         try {
             url = URL;
             doc = Jsoup.connect(url).followRedirects(false).timeout(60000).get();
-            System.out.println("Connected to Site " + url);
+            Writer.logEntry("Connected to Site: " + url + "\n");
         }
         catch (UnknownHostException uh) {
             System.out.println("Error, Site could not be reached.");

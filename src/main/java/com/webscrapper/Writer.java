@@ -14,12 +14,12 @@ import org.jsoup.select.Elements;
 
 public class Writer {
 
-    public static void WriteTextToFile(String text, String URL) {
-        File file = new File("Output.txt");
+    public static void WriteTextToFile(String text, String URL, String fileName) {
+        File file = new File(fileName);
         
         //Following Code Checks if There Exists a File with the Name.
         if (file.exists() == false) {
-            System.out.println("Creating text File...");
+            Writer.logEntry("Creating text File...\n");
             try {
                 file.createNewFile();
             } catch (IOException e) {
@@ -30,9 +30,14 @@ public class Writer {
 
         //Following Code Starts Writing to a File.
         try {
+            Writer.logEntry("Writing Text...\t");
             FileWriter wr = new FileWriter(file, true);
-            wr.append(getDate() + " Entry from ( " + URL + " ): \n" + text + "\n\n");
-            System.out.println("Finished Writing Text.");
+
+            if (URL.equals("")) {
+                wr.append(getDate() + " Log: \n" + text + "\n\n");
+            } else {wr.append(getDate() + " Entry from ( " + URL + " ): \n" + text + "\n\n");}
+            
+            Writer.logEntry("[Done]\n");
             wr.close();
         } catch (IOException e) {
             System.out.println("Error: Cannot Write to file. File may be Opened by some Application");
@@ -47,7 +52,7 @@ public class Writer {
 
         //Creates Empty Folder
         if (folder.exists() == false) {
-            System.out.println("Creating images Folder...");
+            Writer.logEntry("Creating images Folder...\n");
             folder.mkdir();
         }
 
@@ -59,10 +64,12 @@ public class Writer {
             String link = images.get(i).attr("abs:src");
             //Attempt at Downloading Image
             try {
+                Writer.logEntry("Downloading " + imageFile.getName() + "...\t");
                 Response resultImage = Jsoup.connect(link).ignoreContentType(true).timeout(60000).execute();
                 FileOutputStream out = new FileOutputStream(imageFile);
                 out.write(resultImage.bodyAsBytes());
                 out.close();
+                Writer.logEntry("[Done]\n");
 
             //Exception Handlers
             } catch (HttpStatusException h) {
@@ -76,7 +83,7 @@ public class Writer {
                 e.printStackTrace();
             }
         }
-        System.out.println("Finished Writing Images");
+        Writer.logEntry("Finished Writing Images.\n");
     }
 
 //-------------------------------------------------------------
@@ -86,7 +93,7 @@ public class Writer {
 
         //Creates Empty Folder
         if (folder.exists() == false) {
-            System.out.println("Creating audios Folder...");
+            Writer.logEntry("Creating audios Folder...\n");
             folder.mkdir();
         }
 
@@ -95,6 +102,7 @@ public class Writer {
         for (int i=0; i<Audios.size(); i++, next++) {
             File audioFile = new File(folder, "audio" + next + ".ogg");
 
+            //Get Correct source link
             String link = Audios.get(i).absUrl("src");
             for (int p=0; p<Audios.get(i).childrenSize(); p++) {
                 if (Audios.get(i).child(p).hasAttr("src")) {
@@ -106,10 +114,12 @@ public class Writer {
 
             //Attempt at Downloading Image
             try {
+                Writer.logEntry("Downloading " + audioFile.getName() + "...\t");
                 Response resultAudio = Jsoup.connect(link).ignoreContentType(true).timeout(60000).execute();
                 FileOutputStream out = new FileOutputStream(audioFile);
                 out.write(resultAudio.bodyAsBytes());
                 out.close();
+                Writer.logEntry("[Done]\n");
 
             //Exception Handlers
             } catch (HttpStatusException h) {
@@ -123,7 +133,7 @@ public class Writer {
                 e.printStackTrace();
             }
         }
-        System.out.println("Finished Writing Audio Files");
+        Writer.logEntry("Finished Writing Audio Files.\n");
     }
 
     public static String getDate() {
@@ -147,17 +157,19 @@ public class Writer {
         }
 
         if (result == 0) {
-            System.out.println("Starting from scratch...");
-        } else {System.out.println("Starting from Last number = " + (result-1));}
+            Writer.logEntry("Starting from Scratch...\n");
+        } else {Writer.logEntry("Starting from Last number = " + (result-1) + "\n");}
 
         return result;
+    }
+
+    public static void logEntry(String text) {
+        GUI.logWindow.append(text);
     }
 
     public static String[] filterSites(String text) {
         String[] result;
         ArrayList<String> sites = new ArrayList<String>();
-        
-
         text = text.trim();
         String oldText = text;
 
