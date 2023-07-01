@@ -3,7 +3,7 @@
 Web Scraper using JSoup API complete with a GUI using Swing.
 Built Using Maven.
 
-Main file is misspelled as Scrapper but the code's functionality fits the spelling.
+Main file is misspelled as Scrapper.
 
 
 JSoup: https://jsoup.org/
