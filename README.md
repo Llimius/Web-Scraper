@@ -3,7 +3,7 @@
 Web Scraper using JSoup API complete with a GUI using Swing.
 Built Using Maven.
 
-Main file is misspelled as Scrapper.
+Extracts HTML Elements from a URL based on choice.
 
 
 JSoup: https://jsoup.org/
